@@ -101,6 +101,10 @@ svg{
   opacity: 0;
 }
 
+.scroll-text{
+  left: 50%;
+}
+
 .loading{
   display: flex;
   justify-content: center;
@@ -151,7 +155,11 @@ svg{
 
 .arrow-svg-wrapper{
   position: absolute;
-  left: 50%;
+  display: flex;
+  flex-direction: column;
+  text-align: center; 
+  align-items: center;
+  left: 48%;
   top: 90%;
   opacity: 0;
   transform: translate(-50%, -50% );

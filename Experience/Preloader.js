@@ -93,8 +93,9 @@ export default class Preloader extends EventEmitter{
             window.removeEventListener("touchmove", this.touchMove);
             this.playSecondIntro();
         }
-        this.intialY = null;
+        this.initalY = null;
     }
+   
 
     async playIntro(){
        await this.firstIntro();
