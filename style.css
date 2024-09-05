@@ -172,10 +172,13 @@ svg{
 
 .animatethis{
   transform: translateY(100%);
-  display: inline-block;
+  display: inline-flex;
 }
 
 .intro-text{
+  white-space: pre-wrap;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -472,4 +475,23 @@ color: var(--color-text);
   left: auto;
 }
 
+.hero-main{
+  bottom: 120px;
+}
+
+.hero-wrapper{
+  width: calc(100% - 60px);
+}
+
+.hero-main-title{
+  font-size: 32px;
+}
+
+.hero-main-description{
+  font-size: 18px;
+}
+
+.hero-second-subheading{
+  font-size: 18px;
+}
 }

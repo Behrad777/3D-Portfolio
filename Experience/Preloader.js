@@ -28,8 +28,8 @@ export default class Preloader extends EventEmitter{
 
         return new Promise((resolve) => {
             this.timeline = new gsap.timeline();
+            this.timeline.set(".animatethis", { y: 0, yPercent: 182 });
 
-        if(this.device === "desktop"){
             this.timeline
             .to(".preloader", {
                opacity: 0,
@@ -39,33 +39,26 @@ export default class Preloader extends EventEmitter{
                 document.querySelector(".preloader-wrapper").classList.add(".hidden");
                
             }
-            }).to(this.room.position, {
+            })
+
+        if(this.device === "desktop"){
+            this.timeline.to(this.room.position, {
                 x: -1.2,
                 ease: "power1.out",
                 duration: 0.7,
-                onComplete: resolve,
             });
         } else{
-            this.timeline.to(this.roomChildren.cube.scale, {
-                x: 0.2,
-                y: 0.2,
-                z: 0.2,
-                ease: "back.out(2.5)",
-                duration: 0.7,
-            }).to(this.room.position, {
+            this.timeline.to(this.room.position, {
                 z: -1,
                 ease: "power1.out",
                 duration: 0.7,
-                onComplete: resolve,
-            });
+            })
         }
-
         this.timeline
         .to(".intro-text .animatethis", {
-            yPercent: -100,
+            yPercent: 0,
             stagger: 0.07,
             ease: "back.out(1.2)",
-            onComplete: resolve,
             
         })
         .to(".arrow-svg-wrapper", {
@@ -88,10 +81,29 @@ export default class Preloader extends EventEmitter{
         }
     }
 
+    onTouch(e) {
+        this.initalY = e.touches[0].clientY;
+    }
+    
+    onTouchMove(e) {
+        let currentY = e.touches[0].clientY;
+        let difference = this.initalY - currentY;
+        if (difference > 0) {
+            window.removeEventListener("touchstart", this.touchStart);
+            window.removeEventListener("touchmove", this.touchMove);
+            this.playSecondIntro();
+        }
+        this.intialY = null;
+    }
+
     async playIntro(){
        await this.firstIntro();
         this.scrollOnceEvent = this.onScroll.bind(this);
+        this.touchStart = this.onTouch.bind(this);
+        this.touchMove = this.onTouchMove.bind(this);
         window.addEventListener("wheel", this.scrollOnceEvent);
+        window.addEventListener("touchstart", this.touchStart);
+        window.addEventListener("touchmove", this.touchMove);
 
 
     }
@@ -109,7 +121,7 @@ export default class Preloader extends EventEmitter{
                     opacity: 0
                 }, "fadeelements")
                 .to(".intro-text .animatethis", {
-                    yPercent: 100,
+                    yPercent: 182,
                     stagger: 0.07,
                     ease: "back.in(1.2)",
                     
@@ -133,7 +145,6 @@ export default class Preloader extends EventEmitter{
                     x: 0,
                     z: 0,
                     y: 1.9,
-                    onComplete: resolve,
                 },"same")
                 .set(this.roomChildren.walls.scale, {
                     x:1.753100872039795,
@@ -153,22 +164,22 @@ export default class Preloader extends EventEmitter{
                         z: 0,
                     })
                     .to(".hero-main-title .animatethis", {
-                        yPercent: -100,
+                        yPercent: 0,
                         stagger: 0.07,
                         ease: "back.out(1.2)",
                         
                     }, "introtext").to(".hero-main-description .animatethis", {
-                        yPercent: -100,
+                        yPercent: 0,
                         stagger: 0.07,
                         ease: "back.out(1.7)",
                         
                     }, "introtext").to(".first-sub .animatethis", {
-                        yPercent: -100,
+                        yPercent: 0,
                         stagger: 0.07,
                         ease: "back.out(1.2)",
                         
                     }, "introtext").to(".second-sub .animatethis", {
-                        yPercent: -100,
+                        yPercent: 0,
                         stagger: 0.07,
                         ease: "back.out(1.2)",
                         
@@ -244,7 +255,8 @@ export default class Preloader extends EventEmitter{
                                     ease: "back.out(1)"
                                 })
                     .to(".arrow-svg-wrapper", {
-                            opacity: 1
+                            opacity: 1,
+                            onComplete: resolve,
                         })
             
         
